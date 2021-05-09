@@ -14,11 +14,11 @@ import * as Tone from 'tone'
 const song = require('./audio/Stronger.mp3');
 
 let scene = new Scene();
-let params = { time: 0 , ShineAmount: 0};
+let params = { time: 0, soundTime: 0 };
 let player, autoFilter, analyser;
 
 let camera = new PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-camera.position.z = 4;
+camera.position.z = 1.7;
 
 let container = document.getElementById( 'canvas' );
 document.body.appendChild( container );
@@ -43,18 +43,25 @@ let setUp =  async () => {
       autoFilter = new Tone.AutoFilter("8n");
       autoFilter.start();
       player.connect(autoFilter);
-      analyser = new Tone.Analyser('waveform', 128);
-      autoFilter.connect(analyser);
+      analyser = new Tone.Meter();
+      player.connect(analyser);
       player.toDestination()
 
 }
 
-//Shader Park setup
-let mesh = createSculpture(spCode, () => ( {
+//Shader Park setup 1
+
+// let mesh = createSculpture(spCode, () => ( {
+//   time: params.time,
+//   ShineAmount: params.ShineAmount,
+//   size: 12,
+//   gyroidSteps: .03
+// } ));
+
+
+let mesh = createSculpture(spCode2, () => ( {
   time: params.time,
-  ShineAmount: params.ShineAmount,
-  size: 12,
-  gyroidSteps: .03
+  soundTime: params.soundTime
 } ));
 
 scene.add(mesh);
@@ -67,27 +74,16 @@ let controls = new OrbitControls( camera, renderer.domElement, {
 } );
 
 let render = () => {
-  // if (!player || !player.loaded ) {
-  //   // MP3 not loaded
-  //   return;
-  // }
   requestAnimationFrame( render );
-  params.time += 0.01;
-  params.ShineAmount += 0.01;
+  // params.time += 0.0001;
+  params.soundTime += 0.01;
   controls.update();
   renderer.render( scene, camera );
+  if (player.state === "started") {
+    params.soundTime = Math.abs(Math.sin(analyser.getValue()/10))
+  }
 };
 
-function checkSong() {
-  console.log('TRUE')
-      if (player && player.loaded) {
-      if (player.state === "started") {
-              player.stop();
-      } else {
-              player.start();
-      }
-  }
-}
 
 var buttons = document.getElementsByTagName("button");
 for (let i = 0; i < buttons.length; i++) {
@@ -95,7 +91,6 @@ for (let i = 0; i < buttons.length; i++) {
 };
 
 function onButtonClick(event) {
-  // alert(event.target.id);
   if (player && player.loaded) {
     if (player.state === "started") {
             player.stop();
