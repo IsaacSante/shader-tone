@@ -10,4 +10,5 @@ let n = amp*noise(scale*s+soundTime*.1)+0.3;
 shine(abs(n)*2);
 color(normal*.9 + abs(sin(soundTime/10)) + vec3(n));
 sphere(0.5 + n);
+
 }

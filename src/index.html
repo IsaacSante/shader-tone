@@ -8,28 +8,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="/styles.css">
-    <div class="options">
-        <h1>MSV17</h1>
-        <p>Music visualizer/manipulation <br> by Jiyoon Moon & Isaac Sante</p>
-          <a href="https://github.com/IsaacSante/shader-tone"><p>Code here:</p></a>
-         <p>Start Song:</p>
-          <button  id="fire" class="playSong">>></button>
-          <p>Stop Song:</p>
-          <button  id="ice" class="playSong">||</button>
-          <!-- Slider 1 arduino -->
-         <p>Song Pitch:</p>
-        <input type="range" min="0" max="200" value="0" step="10" class="slider" id="myRangePitch">
-        <!-- Slider 2 arduino -->
-        <p>Song Volume:</p>
-        <input type="range" min="-40" max="1" value="-12" step="0.1" class="slider" id="myRangeVolume">
-        <p>Connect Arduino:</p>
-        <button  id="fire" class="playSong">Arduino</button>
-      </div>
-    <div id="canvas"></div>
-    <script src="/app.js" ></script>
-
-
   </head>  
   <body>
+    <div class="options">
+      <h1>MSV17</h1>
+      <p>Music visualizer/manipulation <br> by Jiyoon Moon & Isaac Sante</p>
+        <a href="https://github.com/IsaacSante/shader-tone"><p>Code here:</p></a>
+       <p>Start Song:</p>
+        <button  id="fire" class="playSong">>></button>
+        <p>Stop Song:</p>
+        <button  id="ice" class="playSong">||</button>
+        <!-- Slider 1 arduino -->
+       <p>Song Pitch:</p>
+      <input type="range" min="0" max="200" value="0" step="10" class="slider" id="myRangePitch">
+      <!-- Slider 2 arduino -->
+      <p>Song Volume:</p>
+      <input type="range" min="-40" max="1" value="-12" step="0.1" class="slider" id="myRangeVolume">
+      <p>Connect Arduino:</p>
+      <button  id="fire" class="playSong">Arduino</button>
+    </div>
+  <div id="canvas"></div>
+  <script src="/app.js" ></script>
   </body>
 </html>

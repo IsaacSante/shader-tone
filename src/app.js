@@ -88,7 +88,7 @@ player = new GrainPlayer({
 let mesh = createSculpture(spCode2, () => ( {
   soundTime: params.soundTime,
   amp: params.amp,
-  scale: params.scale
+  scale: params.scale,
 } ));
 scene.add(mesh);
 
