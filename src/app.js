@@ -47,7 +47,7 @@ container.appendChild( renderer.domElement );
 renderer.setClearColor( 0x000000, 0 );
 
 //init sp code params & tone objects
-let params = { time: 0, soundTime: 0, amp: 1, scale: 1.6};
+let params = {soundTime: 0, amp: 1, scale: 1.6};
 let player, analyser;
 
 //website stuff 
@@ -86,7 +86,6 @@ player = new GrainPlayer({
 }
 
 let mesh = createSculpture(spCode2, () => ( {
-  time: params.time,
   soundTime: params.soundTime,
   amp: params.amp,
   scale: params.scale
