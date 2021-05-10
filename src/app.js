@@ -1,22 +1,19 @@
-import {
-  PerspectiveCamera,
-  Scene,
-  WebGLRenderer,
-  Color,
-} from "three";
+import {PerspectiveCamera, Scene, WebGLRenderer, Color } from "three";
+import {GrainPlayer, Meter } from "tone"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { createSculpture} from 'shader-park-core';
 import { spCode2 } from './spCode2.js';
-import * as Tone from 'tone'
 const song = require('./audio/summer.mp3');
 
 //init three js scene 
 let scene = new Scene();
 let camera = new PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-camera.position.z = 0.5;
 let container = document.getElementById( 'canvas' );
-document.body.appendChild( container );
 let renderer = new WebGLRenderer({ antialias: true, alpha: true  });
+
+//set init values
+camera.position.z = 0.5;
+document.body.appendChild( container );
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setClearColor( new Color(1, 1, 1), 1 );
@@ -25,19 +22,15 @@ renderer.setClearColor( 0x000000, 0 );
 
 //init sp code params & tone objects
 let params = { time: 0, soundTime: 0, amp: 1, scale: 1.6};
-let player, autoFilter, analyser;
+let player, analyser;
 
 //website stuff 
-let scaleSlider = document.getElementById("myRangeScale");
 let songVolumeSlider = document.getElementById("myRangeVolume");
 let songPitchSlider = document.getElementById("myRangePitch");
 
 //arduino stuff
-let pot2
 let slider1, slider2;
-
 let arduinoIsPresent = false 
-let setIsLoading = false
 
 //map function 
 function scale (number, inMin, inMax, outMin, outMax) {
@@ -47,27 +40,23 @@ function scale (number, inMin, inMax, outMin, outMax) {
 //handles values for sp code depending if arduino is connected or not
 function siteVals(){
   if(!arduinoIsPresent){
-    // pot2 = scaleSlider.value
     slider1 = songVolumeSlider.value
     slider2 = songPitchSlider.value
   }else if(arduinoIsPresent){
-
+    //do arduino shit here 
   }
 }
-
 //setup tone js objects
 let setUp =  async () => {
-player = new Tone.GrainPlayer({
-    url:song,
-    loop:false,
-    autostart:false,
-    loopStart:1.0,
-    onload: () => setIsLoading(true),
-  }).toDestination()
-   
-      analyser = new Tone.Meter();
-      player.connect(analyser).toDestination()
-
+player = new GrainPlayer({
+  url:song,
+  loop:false,
+  autostart:false,
+  loopStart:1.0
+})
+      analyser = new Meter();
+      player.connect(analyser)
+      player.toDestination()
 }
 
 let mesh = createSculpture(spCode2, () => ( {
@@ -76,7 +65,6 @@ let mesh = createSculpture(spCode2, () => ( {
   amp: params.amp,
   scale: params.scale
 } ));
-
 scene.add(mesh);
 
 let controls = new OrbitControls( camera, renderer.domElement, {
@@ -91,37 +79,35 @@ let render = () => {
   params.time += 0.001;
   controls.update();
   renderer.render( scene, camera );
-  params.amp = scale(slider1,-40,-12,0,1);
-  params.scale = scale(slider2,0,200,0,3);
-  player.volume.value = slider1
-  player.detune = slider2
-  if (player.state === "started") {
-    let count = Math.abs(Math.sin(analyser.getValue())) 
-    params.soundTime = count
-  }else{
-    params.soundTime = 0
-  }
+        if(player){
+        params.amp = scale(slider1,-40,-12,0,1);
+        params.scale = scale(slider2,0,200,0,3);
+        player.volume.value = slider1
+        player.detune = slider2
+        if (player.state === "started") {
+          let count = Math.abs(Math.sin(analyser.getValue())) 
+          params.soundTime = count
+        }else{
+          params.soundTime = 0
+        }
+      }
 };
 
-siteVals()
-setUp()
-render()
-
 function onButtonClick(event) {
-  if (player && setIsLoading) {
-       player.start();
-    if (player.state === "started") {
-            player.stop();
-    } else {
-            player.start();
-    }
-}else{
-  console.log(setIsLoading)
+    player.start()
 }
+function onButtonClickStop(event) {
+  player.stop()
 }
 
 //event listeners
 var button = document.getElementsByTagName("button")[0];
+var buttonStop = document.getElementsByTagName("button")[1];
 button.addEventListener("click", onButtonClick, false);
+buttonStop.addEventListener("click", onButtonClickStop, false);
 songVolumeSlider.addEventListener("input", siteVals);
 songPitchSlider.addEventListener("input", siteVals);
+
+siteVals()
+setUp()
+render()
