@@ -1,9 +1,35 @@
-import {PerspectiveCamera, Scene, WebGLRenderer, Color } from "three";
+import {PerspectiveCamera, Scene, WebGLRenderer, Color, } from "three";
 import {GrainPlayer, Meter } from "tone"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { createSculpture} from 'shader-park-core';
+import { createSculpture, } from 'shader-park-core';
 import { spCode2 } from './spCode2.js';
 const song = require('./audio/summer.mp3');
+
+// import SerialPort from "serialport";
+// get Arduino stuff
+// process.setMaxListeners(0);
+// var portName = "COM3"; // Change to your port name
+// var myPort = new SerialPort(portName, 9600);
+// let Readline = SerialPort.parsers.Readline; // make instance of Readline parser
+// let parser = new Readline(); // make a new parser to read ASCII lines
+// myPort.pipe(parser); // pipe the serial stream to the parser
+// myPort.on('open', showPortOpen); // called when the serial port opens
+// myPort.on('close', showPortClose); // called when the serial port closes
+// myPort.on('error', showError); // called when there's an error with the serial port
+// parser.on('data', readSerialData); // called when there's new data incoming
+// function readSerialData(data) {
+//     console.log(data)
+// }
+// function showPortOpen() {
+//     console.log('port open. Data rate: ' + myPort.baudRate);
+// }
+// function showPortClose() {
+//     console.log('port closed.');
+// }
+// function showError(error) {
+//     console.log('Serial port error: ' + error);
+// }
+//
 
 //init three js scene 
 let scene = new Scene();
