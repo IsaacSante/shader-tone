@@ -2,10 +2,23 @@ import {PerspectiveCamera, Scene, WebGLRenderer, Color, } from "three";
 import {GrainPlayer, Meter } from "tone"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { createSculpture, } from 'shader-park-core';
-import { spCode2 } from './spCode2.js';
+// import { spCode2 } from './spCode2.js';
 const song = require('./audio/lose.mp3');
 
 console.log('Hey this Isaac')
+
+let spCode = `
+let soundTime = input()
+let amp = input()
+let scale = input()
+setMaxIterations(3);
+setStepSize(.9999)
+let s = getRayDirection();
+let n = amp*noise(scale*s+soundTime*.1)+0.3;
+shine(abs(n)*2);
+color(normal*.9 + abs(sin(soundTime/10)) + vec3(n));
+sphere(0.5 + n);
+`
 
 // import SerialPort from "serialport";
 // get Arduino stuff
@@ -87,7 +100,9 @@ player = new GrainPlayer({
       player.toDestination()
 }
 
-let mesh = createSculpture(spCode2, () => ( {
+
+
+let mesh = createSculpture(spCode, () => ( {
   soundTime: params.soundTime,
   amp: params.amp,
   scale: params.scale,
