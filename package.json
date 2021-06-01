@@ -2,11 +2,11 @@
   "name": "finalprj",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel ./src/index.html",
-    "build": "parcel build index.html"
+    "start": "parcel src/index.html --open",
+    "build": "parcel build src/index.html"
   },
   "author": "",
   "license": "ISC",
