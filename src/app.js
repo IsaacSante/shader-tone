@@ -3,7 +3,9 @@ import {GrainPlayer, Meter } from "tone"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { createSculpture, } from 'shader-park-core';
 import { spCode2 } from './spCode2.js';
-const song = require('./audio/summer.mp3');
+const song = require('./audio/lose.mp3');
+
+console.log('Hey this Isaac')
 
 // import SerialPort from "serialport";
 // get Arduino stuff
@@ -99,21 +101,36 @@ let controls = new OrbitControls( camera, renderer.domElement, {
   rotateSpeed : 0.5,
 } );
 
+let newSongSpeed
+let conditionHandler;
+
+function songSpeed() {
+conditionHandler = Math.abs(analyser.getValue())
+    if( 60 > conditionHandler > 0 ) {
+      newSongSpeed = Math.abs(Math.cos(analyser.getValue()));
+    }else{
+      newSongSpeed = 0; 
+    }
+}
+
 let render = () => {
   requestAnimationFrame( render );
-  params.time += 0.001;
   controls.update();
   renderer.render( scene, camera );
+  
         if(player){
+
         params.amp = scale(slider1,-40,-12,0,1);
         params.scale = scale(slider2,0,200,0,3);
         player.volume.value = slider1
         player.detune = slider2
+
         if (player.state === "started") {
-          let count = Math.abs(Math.sin(analyser.getValue())) 
-          params.soundTime = count
+          songSpeed()
+          params.soundTime += .001
+          params.soundTime =  params.soundTime + (newSongSpeed/2) 
         }else{
-          params.soundTime = 0
+          params.soundTime += .001
         }
       }
 };
